@@ -1,0 +1,69 @@
+@import "tailwindcss";
+
+@theme inline {
+  /* Design system: warm cream, engineering-first */
+  --color-background: hsl(40, 20%, 97%);
+  --color-background-subtle: hsl(40, 15%, 95%);
+  --color-card: hsl(40, 20%, 98%);
+  --color-foreground: hsl(0, 0%, 16%);
+  --color-muted-foreground: hsl(0, 0%, 42%);
+  --color-border: hsl(40, 15%, 90%);
+  --color-input: hsl(40, 15%, 90%);
+  --color-primary: hsl(0, 0%, 12%);
+  --color-primary-foreground: hsl(0, 0%, 100%);
+  --color-accent: hsl(20, 80%, 92%);
+  --color-accent-vivid: hsl(20, 70%, 55%);
+  --color-secondary: hsl(40, 15%, 92%);
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+}
+
+:root {
+  --background: hsl(40, 20%, 97%);
+  --background-subtle: hsl(40, 15%, 95%);
+  --card: hsl(40, 20%, 98%);
+  --foreground: hsl(0, 0%, 16%);
+  --muted-foreground: hsl(0, 0%, 42%);
+  --border: hsl(40, 15%, 90%);
+  --input: hsl(40, 15%, 90%);
+  --primary: hsl(0, 0%, 12%);
+  --primary-foreground: hsl(0, 0%, 100%);
+  --accent: hsl(20, 80%, 92%);
+  --accent-vivid: hsl(20, 70%, 55%);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Container utilities */
+.container-narrow {
+  max-width: 896px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.container-wide {
+  max-width: 1792px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Focus ring */
+*:focus-visible {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

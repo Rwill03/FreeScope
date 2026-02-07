@@ -1,5 +1,10 @@
 # FreeScope
-
+![Frontend](https://img.shields.io/badge/Frontend-React%20%2B%20TypeScript-61DAFB)
+![Backend](https://img.shields.io/badge/Backend-Next.js-black)
+![Database](https://img.shields.io/badge/Database-SQLite%20%2B%20Prisma-336791)
+![AI](https://img.shields.io/badge/AI-Ollama%20Local%20LLM-orange)
+![Design](https://img.shields.io/badge/Design-Tailwind%20CSS-38B2AC)
+![License](https://img.shields.io/badge/License-MIT-green)
 Project-centric scope and feature estimation for freelancers. Evaluate feature requests against a project’s contract/scope using a local LLM (Ollama). No embeddings or vector stores — natural language reasoning only.
 
 ## Stack
@@ -8,6 +13,18 @@ Project-centric scope and feature estimation for freelancers. Evaluate feature r
 - **Backend:** Next.js App Router, API routes
 - **Database:** SQLite + Prisma ORM
 - **AI:** Ollama (local LLM) for scope comparison and estimation; strict JSON output
+
+## Widgets & UI Components
+
+- **Navigation** (`nav.tsx`) — Header navigation with logo and menu
+- **Tag Input** (`tag-input.tsx`) — Multi-select input for skills and tags
+- **Badge** (`badge.tsx`) — Status indicators (in scope, out of scope, partial)
+- **Button** (`button.tsx`) — Primary, secondary, and action buttons
+- **Card** (`card.tsx`) — Container for projects, features, and results
+- **Input** (`input.tsx`) — Text fields for names, descriptions, rates
+- **Label** (`label.tsx`) — Form labels with accessibility
+- **Select** (`select.tsx`) — Dropdown for role, experience level selection
+- **Textarea** (`textarea.tsx`) — Multi-line input for contract/scope text
 
 ## Setup
 
