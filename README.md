@@ -14,6 +14,18 @@ Project-centric scope and feature estimation for freelancers. Evaluate feature r
 - **Database:** SQLite + Prisma ORM
 - **AI:** Ollama (local LLM) for scope comparison and estimation; strict JSON output
 
+## Widgets & UI Components
+
+- **Navigation** (`nav.tsx`) — Header navigation with logo and menu
+- **Tag Input** (`tag-input.tsx`) — Multi-select input for skills and tags
+- **Badge** (`badge.tsx`) — Status indicators (in scope, out of scope, partial)
+- **Button** (`button.tsx`) — Primary, secondary, and action buttons
+- **Card** (`card.tsx`) — Container for projects, features, and results
+- **Input** (`input.tsx`) — Text fields for names, descriptions, rates
+- **Label** (`label.tsx`) — Form labels with accessibility
+- **Select** (`select.tsx`) — Dropdown for role, experience level selection
+- **Textarea** (`textarea.tsx`) — Multi-line input for contract/scope text
+
 ## Setup
 
 1. **Install dependencies**
