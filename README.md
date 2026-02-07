@@ -45,7 +45,6 @@ FreeScope uses a local language model (Ollama) running on your machine to:
 
 ### Technology Stack
 
-### Technology Stack
 
 - **Frontend:** React + TypeScript — Modern, type-safe UI with real-time updates
 - **Backend:** Next.js App Router — Full-stack framework with API routes and server components
