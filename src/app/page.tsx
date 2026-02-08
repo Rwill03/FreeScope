@@ -79,10 +79,10 @@ export default function HomePage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.4, delay: 0.05 * i }}
               >
-                <Link href={`/project/${project.id}`}>
-                  <Card className="h-full transition-shadow hover:shadow-md hover:border-[hsl(40,15%,85%)]">
+                <Link href={`/project/${project.id}`} className="group">
+                  <Card className="h-full group-hover:shadow-lg group-active:scale-95 transition-all">
                     <CardHeader className="pb-2">
-                      <h2 className="text-xl font-semibold leading-tight">
+                      <h2 className="text-xl font-semibold leading-tight group-hover:text-[hsl(20,70%,55%)] transition-colors">
                         {project.name}
                       </h2>
                       {project.description ? (

@@ -58,6 +58,29 @@ body {
   outline-offset: 2px;
 }
 
+/* Link styling */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Smooth transitions */
+* {
+  @apply transition-colors duration-200;
+}
+
+/* Button press effect */
+button:active,
+a:active {
+  transform: scale(0.98);
+}
+
+/* Underline animation for nav links */
+.after\:absolute::after {
+  content: '';
+  transition: width 200ms ease;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
