@@ -134,16 +134,18 @@ export default function ProjectDetailPage() {
             animate={motionAnimate}
             transition={{ ...motionTransition, delay: 0.1 }}
           >
-            <Card>
-              <CardHeader>
-                <CardTitle>Contract / scope</CardTitle>
+            <div className="rounded-2xl border border-[hsl(40,15%,90%)] bg-[hsl(40,20%,98%)] p-6 shadow-sm md:p-8">
+              <div className="flex flex-col space-y-1.5 pb-4">
+                <h3 className="text-2xl font-semibold leading-none tracking-tight">
+                  Contract / scope
+                </h3>
                 {project.contractUploadedAt && (
                   <p className="text-sm text-[hsl(0,0%,42%)]">
                     Uploaded {formatDate(project.contractUploadedAt)}
                   </p>
                 )}
-              </CardHeader>
-              <CardContent>
+              </div>
+              <div className="px-0 py-0">
                 {hasContract ? (
                   <>
                     <div className="max-h-[400px] overflow-y-auto rounded-lg border border-[hsl(40,15%,90%)] bg-[hsl(40,15%,95%)] p-4 text-sm leading-relaxed whitespace-pre-wrap">
@@ -154,8 +156,8 @@ export default function ProjectDetailPage() {
                 ) : (
                   <UploadContract projectId={id} onUpload={() => window.location.reload()} />
                 )}
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           </motion.div>
 
           <motion.div
@@ -163,11 +165,13 @@ export default function ProjectDetailPage() {
             animate={motionAnimate}
             transition={{ ...motionTransition, delay: 0.15 }}
           >
-            <Card>
-              <CardHeader>
-                <CardTitle>Feature requests</CardTitle>
-              </CardHeader>
-              <CardContent>
+            <div className="rounded-2xl border border-[hsl(40,15%,90%)] bg-[hsl(40,20%,98%)] p-6 shadow-sm md:p-8">
+              <div className="flex flex-col space-y-1.5 pb-4">
+                <h3 className="text-2xl font-semibold leading-none tracking-tight">
+                  Feature requests
+                </h3>
+              </div>
+              <div className="px-0 py-0">
                 {featureRequests.length === 0 ? (
                   <p className="text-sm text-[hsl(0,0%,42%)]">
                     No feature requests yet. Add one after uploading scope.
@@ -177,7 +181,7 @@ export default function ProjectDetailPage() {
                     {featureRequests.map((fr) => (
                       <li key={fr.id}>
                         <Link href={`/project/${id}/feature/${fr.id}`}>
-                          <div className="rounded-lg border border-[hsl(40,15%,90%)] p-3 transition-colors hover:bg-[hsl(40,15%,96%)]">
+                          <div className="rounded-lg border border-[hsl(40,15%,90%)] p-3 transition-colors hover:bg-[hsl(40,15%,96%)] hover:shadow-sm">
                             <p className="line-clamp-2 text-sm font-medium">
                               {fr.description.slice(0, 120)}
                               {fr.description.length > 120 ? "…" : ""}
@@ -205,8 +209,8 @@ export default function ProjectDetailPage() {
                     ))}
                   </ul>
                 )}
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           </motion.div>
         </div>
       </div>
