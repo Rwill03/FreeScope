@@ -32,7 +32,7 @@ export function Nav() {
                   key={href}
                   href={href}
                   className={cn(
-                    "relative text-sm font-medium transition-colors pb-1",
+                    "relative text-sm font-medium transition-colors duration-150 ease-in-out pb-1 after:transition-all after:duration-200 after:w-0",
                     isActive 
                       ? "text-[hsl(0,0%,16%)] after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-[hsl(0,0%,16%)]" 
                       : "text-[hsl(0,0%,42%)] hover:text-[hsl(0,0%,16%)] hover:after:absolute hover:after:bottom-0 hover:after:left-0 hover:after:w-full hover:after:h-0.5 hover:after:bg-[hsl(0,0%,42%)]"

@@ -80,9 +80,9 @@ export default function HomePage() {
                 transition={{ duration: 0.4, delay: 0.05 * i }}
               >
                 <Link href={`/project/${project.id}`} className="group">
-                  <Card className="h-full group-hover:shadow-lg group-active:scale-95 transition-all">
+                  <Card className="h-full group-hover:shadow-lg group-active:scale-95 transition-all duration-200 ease-in-out">
                     <CardHeader className="pb-2">
-                      <h2 className="text-xl font-semibold leading-tight group-hover:text-[hsl(20,70%,55%)] transition-colors">
+                      <h2 className="text-xl font-semibold leading-tight group-hover:text-[hsl(20,70%,55%)] transition-colors duration-200 ease-in-out">
                         {project.name}
                       </h2>
                       {project.description ? (
