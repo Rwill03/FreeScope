@@ -5,8 +5,7 @@ import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Nav } from "@/components/nav";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button"; 
 import { Badge } from "@/components/ui/badge";
 import type { ProjectDetail, FeatureRequestListItem } from "@/types";
 
@@ -58,14 +57,23 @@ export default function ProjectDetailPage() {
 
   useEffect(() => {
     if (!id) return;
-    fetch(`/api/projects/${id}`)
-      .then((res) => {
+    const ac = new AbortController();
+    const load = async () => {
+      try {
+        const res = await fetch(`/api/projects/${id}`, { signal: ac.signal });
         if (!res.ok) throw new Error("Not found");
-        return res.json();
-      })
-      .then((data: { project: ProjectDetail }) => setProject(data.project))
-      .catch(() => setError("Project not found"))
-      .finally(() => setLoading(false));
+        const data: { project: ProjectDetail } = await res.json();
+        setProject(data.project);
+      } catch (e: unknown) {
+        const isAbort = typeof e === "object" && e !== null && ("name" in e) && (e as { name?: unknown }).name === "AbortError";
+        if (isAbort) return;
+        setError(e instanceof Error ? e.message : "Project not found");
+      } finally {
+        setLoading(false);
+      }
+    };
+    void load();
+    return () => ac.abort();
   }, [id]);
 
   if (loading) {
@@ -151,10 +159,10 @@ export default function ProjectDetailPage() {
                     <div className="max-h-[400px] overflow-y-auto rounded-lg border border-[hsl(40,15%,90%)] bg-[hsl(40,15%,95%)] p-4 text-sm leading-relaxed whitespace-pre-wrap">
                       {project.contractText}
                     </div>
-                    <ReplaceScope projectId={id} onUpload={() => window.location.reload()} />
+                    <ReplaceScope projectId={id} onUpload={() => router.refresh()} />
                   </>
                 ) : (
-                  <UploadContract projectId={id} onUpload={() => window.location.reload()} />
+                  <UploadContract projectId={id} onUpload={() => router.refresh()} />
                 )}
               </div>
             </div>
