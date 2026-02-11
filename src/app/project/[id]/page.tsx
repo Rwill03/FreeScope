@@ -189,7 +189,7 @@ export default function ProjectDetailPage() {
                     {featureRequests.map((fr) => (
                       <li key={fr.id}>
                         <Link href={`/project/${id}/feature/${fr.id}`}>
-                          <div className="rounded-lg border border-[hsl(40,15%,90%)] p-3 transition-all duration-200 ease-in-out hover:bg-[hsl(40,15%,96%)] hover:shadow-sm hover:-translate-y-0.5">
+                          <div className="rounded-lg border border-[hsl(40,15%,90%)] p-3 transform-gpu transition-all duration-400 ease-in-out hover:bg-[hsl(40,15%,96%)] hover:shadow-sm hover:-translate-y-1">
                             <p className="line-clamp-2 text-sm font-medium">
                               {fr.description.slice(0, 120)}
                               {fr.description.length > 120 ? "…" : ""}
