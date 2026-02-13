@@ -78,7 +78,13 @@ export async function POST(
       );
     }
 
-    const skills = JSON.parse(profile.skills) as string[];
+    let skills: string[];
+    try {
+      skills = JSON.parse(profile.skills) as string[];
+    } catch {
+      console.error("Failed to parse freelancer skills JSON:", profile.skills);
+      skills = [];
+    }
     const result = await evaluateScopeAndEstimate({
       projectScope: contractDoc.rawText,
       featureDescription: description,
