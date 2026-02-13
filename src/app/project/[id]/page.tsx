@@ -202,6 +202,7 @@ export default function ProjectDetailPage() {
                                   <span className="text-xs text-[hsl(0,0%,42%)]">
                                     {fr.totalHours} h · €
                                     {fr.totalPrice.toLocaleString("en-US", {
+                                      minimumFractionDigits: 0,
                                       maximumFractionDigits: 0,
                                     })}
                                   </span>
