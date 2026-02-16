@@ -26,7 +26,7 @@ export default function HomePage() {
   return (
     <>
       <Nav />
-      <div className="container-narrow px-4 py-20 md:py-28 lg:py-36">
+      <div className="container-narrow px-4 py-16 sm:py-20 md:py-28 lg:py-36">
         <motion.div
           initial={MOTION_CONFIG.initial}
           animate={MOTION_CONFIG.animate}

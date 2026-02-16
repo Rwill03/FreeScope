@@ -60,7 +60,7 @@ export default function NewProjectPage() {
   return (
     <>
       <Nav />
-      <div className="container-narrow px-4 py-20 md:py-28">
+      <div className="container-narrow px-4 py-16 sm:py-20 md:py-28">
         <motion.div
           initial={MOTION_CONFIG.initial}
           animate={MOTION_CONFIG.animate}

@@ -70,7 +70,7 @@ export default function ProjectDetailPage() {
     return (
       <>
         <Nav />
-        <div className="container-wide px-4 py-20">
+        <div className="container-wide px-4 py-16 sm:py-20">
           <p className="text-[hsl(0,0%,42%)]">Loading…</p>
         </div>
       </>
@@ -81,7 +81,7 @@ export default function ProjectDetailPage() {
     return (
       <>
         <Nav />
-        <div className="container-wide px-4 py-20">
+        <div className="container-wide px-4 py-16 sm:py-20">
           <p className="text-red-600">{error || "Not found"}</p>
           <Button variant="secondary" className="mt-4" onClick={() => router.push("/")}>
             Back to projects
@@ -97,7 +97,7 @@ export default function ProjectDetailPage() {
   return (
     <>
       <Nav />
-      <div className="container-wide px-4 py-20 md:py-28">
+      <div className="container-wide px-4 py-16 sm:py-20 md:py-28">
         <motion.div
           initial={MOTION_CONFIG.initial}
           animate={MOTION_CONFIG.animate}

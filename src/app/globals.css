@@ -52,6 +52,16 @@ body {
   margin-right: auto;
 }
 
+/* Responsive padding utility for main content sections */
+.content-padding {
+  @apply px-4 py-16 sm:px-6 sm:py-20 md:py-28 lg:py-36;
+}
+
+/* Responsive form padding */
+.form-padding {
+  @apply px-6 pb-6 md:px-8 md:pb-8;
+}
+
 /* Focus ring */
 *:focus-visible {
   outline: 2px solid var(--primary);
