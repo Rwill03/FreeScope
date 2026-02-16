@@ -9,13 +9,19 @@ export async function GET() {
     if (!profile) {
       return NextResponse.json({ profile: null });
     }
+    let skills: string[] = [];
+    try {
+      skills = JSON.parse(profile.skills) as string[];
+    } catch {
+      console.error("Failed to parse freelancer skills JSON:", profile.skills);
+    }
     return NextResponse.json({
       profile: {
         id: profile.id,
         role: profile.role,
         yearsExperience: profile.yearsExperience,
         hourlyRate: profile.hourlyRate,
-        skills: JSON.parse(profile.skills) as string[],
+        skills,
         createdAt: profile.createdAt,
       },
     });
@@ -36,10 +42,13 @@ export async function PUT(request: Request) {
       typeof role !== "string" ||
       typeof yearsExperience !== "number" ||
       typeof hourlyRate !== "number" ||
-      !Array.isArray(skills)
+      !Array.isArray(skills) ||
+      !role.trim() ||
+      yearsExperience < 0 ||
+      hourlyRate <= 0
     ) {
       return NextResponse.json(
-        { error: "Invalid payload: role, yearsExperience, hourlyRate, skills required" },
+        { error: "Invalid payload: role (non-empty), yearsExperience (≥0), hourlyRate (>0), and skills array are required" },
         { status: 400 }
       );
     }
@@ -71,13 +80,20 @@ export async function PUT(request: Request) {
       });
     }
 
+    let parsedSkills: string[] = [];
+    try {
+      parsedSkills = JSON.parse(profile.skills) as string[];
+    } catch {
+      console.error("Failed to parse freelancer skills JSON:", profile.skills);
+    }
+
     return NextResponse.json({
       profile: {
         id: profile.id,
         role: profile.role,
         yearsExperience: profile.yearsExperience,
         hourlyRate: profile.hourlyRate,
-        skills: JSON.parse(profile.skills) as string[],
+        skills: parsedSkills,
         createdAt: profile.createdAt,
       },
     });

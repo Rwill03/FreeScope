@@ -45,7 +45,7 @@ export function TagInput({ value, onChange, placeholder = "Add skill…", classN
       {value.map((tag, i) => (
         <Badge
           key={i}
-          className="cursor-pointer hover:bg-[hsl(40,15%,85%)]"
+          className="cursor-pointer transition-colors duration-150 ease-in-out hover:bg-[hsl(40,15%,85%)]"
           onClick={() => removeTag(i)}
         >
           {tag} ×

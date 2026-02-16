@@ -5,22 +5,13 @@ import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Nav } from "@/components/nav";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/button"; 
 import { Badge } from "@/components/ui/badge";
+import { CardSkeleton } from "@/components/ui/skeleton";
+import { NoFeatureRequestsEmpty, NoContractEmpty } from "@/components/empty-state";
+import { formatDate } from "@/lib/formatting";
+import { MOTION_CONFIG } from "@/lib/motion";
 import type { ProjectDetail, FeatureRequestListItem } from "@/types";
-
-const motionOpt = { opacity: 0, y: 20 };
-const motionAnimate = { opacity: 1, y: 0 };
-const motionTransition = { duration: 0.6 };
-
-function formatDate(iso: string) {
-  return new Date(iso).toLocaleDateString("en-GB", {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-  });
-}
 
 function ScopeBadge({ status }: { status: string }) {
   const label =
@@ -58,22 +49,34 @@ export default function ProjectDetailPage() {
 
   useEffect(() => {
     if (!id) return;
-    fetch(`/api/projects/${id}`)
-      .then((res) => {
+    const ac = new AbortController();
+    const load = async () => {
+      try {
+        const res = await fetch(`/api/projects/${id}`, { signal: ac.signal });
         if (!res.ok) throw new Error("Not found");
-        return res.json();
-      })
-      .then((data: { project: ProjectDetail }) => setProject(data.project))
-      .catch(() => setError("Project not found"))
-      .finally(() => setLoading(false));
+        const data: { project: ProjectDetail } = await res.json();
+        setProject(data.project);
+      } catch (e: unknown) {
+        const isAbort = typeof e === "object" && e !== null && ("name" in e) && (e as { name?: unknown }).name === "AbortError";
+        if (isAbort) return;
+        setError(e instanceof Error ? e.message : "Project not found");
+      } finally {
+        setLoading(false);
+      }
+    };
+    void load();
+    return () => ac.abort();
   }, [id]);
 
   if (loading) {
     return (
       <>
         <Nav />
-        <div className="container-wide px-4 py-20">
-          <p className="text-[hsl(0,0%,42%)]">Loading…</p>
+        <div className="container-wide px-4 py-16 sm:py-20 md:py-28">
+          <div className="grid gap-8 lg:grid-cols-2">
+            <CardSkeleton />
+            <CardSkeleton />
+          </div>
         </div>
       </>
     );
@@ -83,7 +86,7 @@ export default function ProjectDetailPage() {
     return (
       <>
         <Nav />
-        <div className="container-wide px-4 py-20">
+        <div className="container-wide px-4 py-16 sm:py-20">
           <p className="text-red-600">{error || "Not found"}</p>
           <Button variant="secondary" className="mt-4" onClick={() => router.push("/")}>
             Back to projects
@@ -99,11 +102,11 @@ export default function ProjectDetailPage() {
   return (
     <>
       <Nav />
-      <div className="container-wide px-4 py-20 md:py-28">
+      <div className="container-wide px-4 py-16 sm:py-20 md:py-28">
         <motion.div
-          initial={motionOpt}
-          animate={motionAnimate}
-          transition={motionTransition}
+          initial={MOTION_CONFIG.initial}
+          animate={MOTION_CONFIG.animate}
+          transition={MOTION_CONFIG.transition}
           className="mb-8"
         >
           <h1 className="text-3xl font-semibold tracking-tight md:text-4xl">
@@ -130,54 +133,56 @@ export default function ProjectDetailPage() {
 
         <div className="grid gap-8 lg:grid-cols-2">
           <motion.div
-            initial={motionOpt}
-            animate={motionAnimate}
-            transition={{ ...motionTransition, delay: 0.1 }}
+            initial={MOTION_CONFIG.initial}
+            animate={MOTION_CONFIG.animate}
+            transition={{ ...MOTION_CONFIG.transition, delay: 0.1 }}
           >
-            <Card>
-              <CardHeader>
-                <CardTitle>Contract / scope</CardTitle>
+            <div className="rounded-2xl border border-[hsl(40,15%,90%)] bg-[hsl(40,20%,98%)] p-6 shadow-sm md:p-8">
+              <div className="flex flex-col space-y-1.5 pb-4">
+                <h3 className="text-2xl font-semibold leading-none tracking-tight">
+                  Contract / scope
+                </h3>
                 {project.contractUploadedAt && (
                   <p className="text-sm text-[hsl(0,0%,42%)]">
                     Uploaded {formatDate(project.contractUploadedAt)}
                   </p>
                 )}
-              </CardHeader>
-              <CardContent>
+              </div>
+              <div className="px-0 py-0">
                 {hasContract ? (
                   <>
                     <div className="max-h-[400px] overflow-y-auto rounded-lg border border-[hsl(40,15%,90%)] bg-[hsl(40,15%,95%)] p-4 text-sm leading-relaxed whitespace-pre-wrap">
                       {project.contractText}
                     </div>
-                    <ReplaceScope projectId={id} onUpload={() => window.location.reload()} />
+                    <ReplaceScope projectId={id} onUpload={() => router.refresh()} />
                   </>
                 ) : (
-                  <UploadContract projectId={id} onUpload={() => window.location.reload()} />
+                  <NoContractEmpty />
                 )}
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           </motion.div>
 
           <motion.div
-            initial={motionOpt}
-            animate={motionAnimate}
-            transition={{ ...motionTransition, delay: 0.15 }}
+            initial={MOTION_CONFIG.initial}
+            animate={MOTION_CONFIG.animate}
+            transition={{ ...MOTION_CONFIG.transition, delay: 0.15 }}
           >
-            <Card>
-              <CardHeader>
-                <CardTitle>Feature requests</CardTitle>
-              </CardHeader>
-              <CardContent>
+            <div className="rounded-2xl border border-[hsl(40,15%,90%)] bg-[hsl(40,20%,98%)] p-6 shadow-sm md:p-8">
+              <div className="flex flex-col space-y-1.5 pb-4">
+                <h3 className="text-2xl font-semibold leading-none tracking-tight">
+                  Feature requests
+                </h3>
+              </div>
+              <div className="px-0 py-0">
                 {featureRequests.length === 0 ? (
-                  <p className="text-sm text-[hsl(0,0%,42%)]">
-                    No feature requests yet. Add one after uploading scope.
-                  </p>
+                  <NoFeatureRequestsEmpty />
                 ) : (
                   <ul className="space-y-3">
                     {featureRequests.map((fr) => (
                       <li key={fr.id}>
                         <Link href={`/project/${id}/feature/${fr.id}`}>
-                          <div className="rounded-lg border border-[hsl(40,15%,90%)] p-3 transition-colors hover:bg-[hsl(40,15%,96%)]">
+                          <div className="rounded-lg border border-[hsl(40,15%,90%)] p-3 transform-gpu transition-all duration-400 ease-in-out hover:bg-[hsl(40,15%,96%)] hover:shadow-sm hover:-translate-y-1">
                             <p className="line-clamp-2 text-sm font-medium">
                               {fr.description.slice(0, 120)}
                               {fr.description.length > 120 ? "…" : ""}
@@ -190,6 +195,7 @@ export default function ProjectDetailPage() {
                                   <span className="text-xs text-[hsl(0,0%,42%)]">
                                     {fr.totalHours} h · €
                                     {fr.totalPrice.toLocaleString("en-US", {
+                                      minimumFractionDigits: 0,
                                       maximumFractionDigits: 0,
                                     })}
                                   </span>
@@ -205,8 +211,8 @@ export default function ProjectDetailPage() {
                     ))}
                   </ul>
                 )}
-              </CardContent>
-            </Card>
+              </div>
+            </div>
           </motion.div>
         </div>
       </div>

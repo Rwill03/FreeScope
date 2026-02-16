@@ -52,10 +52,43 @@ body {
   margin-right: auto;
 }
 
+/* Responsive padding utility for main content sections */
+.content-padding {
+  @apply px-4 py-16 sm:px-6 sm:py-20 md:py-28 lg:py-36;
+}
+
+/* Responsive form padding */
+.form-padding {
+  @apply px-6 pb-6 md:px-8 md:pb-8;
+}
+
 /* Focus ring */
 *:focus-visible {
   outline: 2px solid var(--primary);
   outline-offset: 2px;
+}
+
+/* Link styling */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Smooth transitions */
+* {
+  @apply transition-colors duration-300;
+}
+
+/* Button press effect */
+button:active,
+a:active {
+  transform: scale(0.98);
+}
+
+/* Underline animation for nav links */
+.after\:absolute::after {
+  content: '';
+  transition: width 200ms ease;
 }
 
 @media (prefers-reduced-motion: reduce) {
