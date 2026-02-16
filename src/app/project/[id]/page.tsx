@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import { Nav } from "@/components/nav";
 import { Button } from "@/components/ui/button"; 
 import { Badge } from "@/components/ui/badge";
+import { CardSkeleton } from "@/components/ui/skeleton";
 import { formatDate } from "@/lib/formatting";
 import { MOTION_CONFIG } from "@/lib/motion";
 import type { ProjectDetail, FeatureRequestListItem } from "@/types";
@@ -70,8 +71,11 @@ export default function ProjectDetailPage() {
     return (
       <>
         <Nav />
-        <div className="container-wide px-4 py-16 sm:py-20">
-          <p className="text-[hsl(0,0%,42%)]">Loading…</p>
+        <div className="container-wide px-4 py-16 sm:py-20 md:py-28">
+          <div className="grid gap-8 lg:grid-cols-2">
+            <CardSkeleton />
+            <CardSkeleton />
+          </div>
         </div>
       </>
     );

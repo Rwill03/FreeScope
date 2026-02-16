@@ -8,13 +8,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { TagInput } from "@/components/tag-input";
+import { FormSkeleton } from "@/components/ui/skeleton";
 import { validateRole, validateHourlyRate, validateYearsExperience } from "@/lib/validation";
 import { MOTION_CONFIG } from "@/lib/motion";
 import type { FreelancerProfile as ProfileType } from "@/types";
-
-const motionOpt = { opacity: 0, y: 20 };
-const motionAnimate = { opacity: 1, y: 0 };
-const motionTransition = { duration: 0.6 };
 
 export default function ProfilePage() {
   const [role, setRole] = useState("");
@@ -95,7 +92,17 @@ export default function ProfilePage() {
       <>
         <Nav />
         <div className="container-narrow px-4 py-16 sm:py-20 md:py-28">
-          <p className="text-[hsl(0,0%,42%)]">Loading profile…</p>
+          <h1 className="text-4xl font-semibold tracking-tight md:text-5xl lg:text-6xl">
+            Freelancer profile
+          </h1>
+          <Card className="mt-8">
+            <CardHeader>
+              <CardTitle>Profile</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <FormSkeleton />
+            </CardContent>
+          </Card>
         </div>
       </>
     );
