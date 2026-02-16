@@ -19,7 +19,6 @@ async function extractTextFromPdf(buffer: Buffer): Promise<string> {
   const parser = new PDFParse({ data: new Uint8Array(buffer) });
   try {
     const result = await parser.getText();
-    await parser.destroy();
     return result.text?.trim() ?? "";
   } finally {
     await parser.destroy().catch(() => {});

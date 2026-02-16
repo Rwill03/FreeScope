@@ -1,0 +1,73 @@
+version: '3.8'
+
+services:
+  # Ollama service - local LLM
+  ollama:
+    image: ollama/ollama:latest
+    container_name: freescope-ollama
+    volumes:
+      - ollama-data:/root/.ollama
+    ports:
+      - "11434:11434"
+    networks:
+      - freescope-network
+    healthcheck:
+      test: ["CMD", "ollama", "list"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  # Model initialization service - pulls llama3.2 on first run
+  ollama-init:
+    image: ollama/ollama:latest
+    container_name: freescope-ollama-init
+    depends_on:
+      ollama:
+        condition: service_healthy
+    networks:
+      - freescope-network
+    entrypoint: /bin/sh
+    command: >
+      -c "
+      echo 'Waiting for Ollama to be ready...' &&
+      sleep 5 &&
+      echo 'Pulling llama3.2 model...' &&
+      ollama pull llama3.2 &&
+      echo 'Model ready!'
+      "
+    environment:
+      - OLLAMA_HOST=ollama:11434
+    restart: "no"
+
+  # Next.js application
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: freescope-app
+    depends_on:
+      ollama:
+        condition: service_healthy
+    ports:
+      - "3000:3000"
+    environment:
+      - DATABASE_URL=file:/app/data/dev.db
+      - OLLAMA_BASE_URL=http://ollama:11434/v1
+      - OLLAMA_MODEL=llama3.2
+      - NODE_ENV=production
+    volumes:
+      - app-data:/app/data
+    networks:
+      - freescope-network
+    restart: unless-stopped
+
+volumes:
+  ollama-data:
+    driver: local
+  app-data:
+    driver: local
+
+networks:
+  freescope-network:
+    driver: bridge

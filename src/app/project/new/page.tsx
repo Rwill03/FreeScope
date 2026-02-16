@@ -9,6 +9,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { validateProjectName, validateProjectDescription } from "@/lib/validation";
+import { MOTION_CONFIG } from "@/lib/motion";
 
 const motionOpt = { opacity: 0, y: 20 };
 const motionAnimate = { opacity: 1, y: 0 };
@@ -24,6 +26,20 @@ export default function NewProjectPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+
+    // Validate inputs
+    const nameValidation = validateProjectName(name);
+    if (!nameValidation.valid) {
+      setError(nameValidation.error);
+      return;
+    }
+
+    const descriptionValidation = validateProjectDescription(description);
+    if (!descriptionValidation.valid) {
+      setError(descriptionValidation.error);
+      return;
+    }
+
     setLoading(true);
     try {
       const res = await fetch("/api/projects", {
@@ -44,11 +60,11 @@ export default function NewProjectPage() {
   return (
     <>
       <Nav />
-      <div className="container-narrow px-4 py-20 md:py-28">
+      <div className="container-narrow px-4 py-16 sm:py-20 md:py-28">
         <motion.div
-          initial={motionOpt}
-          animate={motionAnimate}
-          transition={motionTransition}
+          initial={MOTION_CONFIG.initial}
+          animate={MOTION_CONFIG.animate}
+          transition={MOTION_CONFIG.transition}
         >
           <h1 className="text-4xl font-semibold tracking-tight md:text-5xl">
             New project

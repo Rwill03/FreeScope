@@ -12,12 +12,13 @@ const links = [
 export function Nav() {
   const pathname = usePathname();
   return (
-    <nav className="border-b border-[hsl(40,15%,90%)] bg-[hsl(40,20%,98%)]">
+    <nav className="border-b border-[hsl(40,15%,90%)] bg-[hsl(40,20%,98%)]" aria-label="Main navigation">
       <div className="container-wide px-4 py-4">
         <div className="flex items-center gap-6">
           <Link
             href="/"
             className="text-lg font-semibold tracking-tight text-[hsl(0,0%,16%)]"
+            aria-label="FreeScope — Home"
           >
             FreeScope
           </Link>
@@ -32,9 +33,12 @@ export function Nav() {
                   key={href}
                   href={href}
                   className={cn(
-                    "text-sm font-medium transition-colors hover:text-[hsl(20,70%,55%)]",
-                    isActive ? "text-[hsl(0,0%,16%)]" : "text-[hsl(0,0%,42%)]"
+                    "relative text-sm font-medium transition-colors duration-300 ease-in-out pb-1 after:transition-all after:duration-400 after:w-0",
+                    isActive 
+                      ? "text-[hsl(0,0%,16%)] after:absolute after:bottom-0 after:left-0 after:w-full after:h-0.5 after:bg-[hsl(0,0%,16%)]" 
+                      : "text-[hsl(0,0%,42%)] hover:text-[hsl(0,0%,16%)] hover:after:absolute hover:after:bottom-0 hover:after:left-0 hover:after:w-full hover:after:h-0.5 hover:after:bg-[hsl(0,0%,42%)]"
                   )}
+                  aria-current={isActive ? "page" : undefined}
                 >
                   {label}
                 </Link>

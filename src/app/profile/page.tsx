@@ -8,11 +8,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { TagInput } from "@/components/tag-input";
+import { FormSkeleton } from "@/components/ui/skeleton";
+import { validateRole, validateHourlyRate, validateYearsExperience } from "@/lib/validation";
+import { MOTION_CONFIG } from "@/lib/motion";
 import type { FreelancerProfile as ProfileType } from "@/types";
-
-const motionOpt = { opacity: 0, y: 20 };
-const motionAnimate = { opacity: 1, y: 0 };
-const motionTransition = { duration: 0.6 };
 
 export default function ProfilePage() {
   const [role, setRole] = useState("");
@@ -22,6 +21,7 @@ export default function ProfilePage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<"saved" | "error" | null>(null);
+  const [validationErrors, setValidationErrors] = useState<{ [key: string]: string }>({});
 
   useEffect(() => {
     fetch("/api/profile")
@@ -41,6 +41,29 @@ export default function ProfilePage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setMessage(null);
+    setValidationErrors({});
+
+    // Validate inputs
+    const roleValidation = validateRole(role);
+    if (!roleValidation.valid) {
+      setValidationErrors((prev) => ({ ...prev, role: roleValidation.error }));
+    }
+
+    const yearsValidation = validateYearsExperience(yearsExperience);
+    if (!yearsValidation.valid) {
+      setValidationErrors((prev) => ({ ...prev, yearsExperience: yearsValidation.error }));
+    }
+
+    const rateValidation = validateHourlyRate(hourlyRate);
+    if (!rateValidation.valid) {
+      setValidationErrors((prev) => ({ ...prev, hourlyRate: rateValidation.error }));
+    }
+
+    if (!roleValidation.valid || !yearsValidation.valid || !rateValidation.valid) {
+      setMessage("error");
+      return;
+    }
+
     setSaving(true);
     try {
       const res = await fetch("/api/profile", {
@@ -56,6 +79,7 @@ export default function ProfilePage() {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Failed to save");
       setMessage("saved");
+      setValidationErrors({});
     } catch {
       setMessage("error");
     } finally {
@@ -67,8 +91,18 @@ export default function ProfilePage() {
     return (
       <>
         <Nav />
-        <div className="container-narrow px-4 py-20 md:py-28">
-          <p className="text-[hsl(0,0%,42%)]">Loading profile…</p>
+        <div className="container-narrow px-4 py-16 sm:py-20 md:py-28">
+          <h1 className="text-4xl font-semibold tracking-tight md:text-5xl lg:text-6xl">
+            Freelancer profile
+          </h1>
+          <Card className="mt-8">
+            <CardHeader>
+              <CardTitle>Profile</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <FormSkeleton />
+            </CardContent>
+          </Card>
         </div>
       </>
     );
@@ -77,11 +111,11 @@ export default function ProfilePage() {
   return (
     <>
       <Nav />
-      <div className="container-narrow px-4 py-20 md:py-28 lg:py-36">
+      <div className="container-narrow px-4 py-16 sm:py-20 md:py-28 lg:py-36">
         <motion.div
-          initial={motionOpt}
-          animate={motionAnimate}
-          transition={motionTransition}
+          initial={MOTION_CONFIG.initial}
+          animate={MOTION_CONFIG.animate}
+          transition={MOTION_CONFIG.transition}
         >
           <h1 className="text-4xl font-semibold tracking-tight md:text-5xl lg:text-6xl">
             Freelancer profile
@@ -91,7 +125,7 @@ export default function ProfilePage() {
           </p>
 
           <Card className="mt-8">
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} aria-label="Freelancer profile form">
               <CardHeader>
                 <CardTitle>Profile</CardTitle>
               </CardHeader>
@@ -104,7 +138,12 @@ export default function ProfilePage() {
                     onChange={(e) => setRole(e.target.value)}
                     placeholder="e.g. Full-stack developer"
                     required
+                    aria-invalid={!!validationErrors.role}
+                    aria-describedby={validationErrors.role ? "role-error" : undefined}
                   />
+                  {validationErrors.role && (
+                    <p id="role-error" className="text-sm text-red-600">{validationErrors.role}</p>
+                  )}
                 </div>
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div className="space-y-2">
@@ -117,7 +156,12 @@ export default function ProfilePage() {
                       onChange={(e) => setYearsExperience(e.target.value)}
                       placeholder="5"
                       required
+                      aria-invalid={!!validationErrors.yearsExperience}
+                      aria-describedby={validationErrors.yearsExperience ? "years-error" : undefined}
                     />
+                    {validationErrors.yearsExperience && (
+                      <p id="years-error" className="text-sm text-red-600">{validationErrors.yearsExperience}</p>
+                    )}
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="rate">Hourly rate (EUR)</Label>
@@ -130,7 +174,12 @@ export default function ProfilePage() {
                       onChange={(e) => setHourlyRate(e.target.value)}
                       placeholder="85"
                       required
+                      aria-invalid={!!validationErrors.hourlyRate}
+                      aria-describedby={validationErrors.hourlyRate ? "rate-error" : undefined}
                     />
+                    {validationErrors.hourlyRate && (
+                      <p id="rate-error" className="text-sm text-red-600">{validationErrors.hourlyRate}</p>
+                    )}
                   </div>
                 </div>
                 <div className="space-y-2">
