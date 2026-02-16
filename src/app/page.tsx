@@ -6,6 +6,7 @@ import { motion } from "framer-motion";
 import { Nav } from "@/components/nav";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { NoProjectsEmpty } from "@/components/empty-state";
 import { formatDate } from "@/lib/formatting";
 import { MOTION_CONFIG, MOTION_LIST_ITEM } from "@/lib/motion";
 import type { Project } from "@/types";
@@ -53,12 +54,9 @@ export default function HomePage() {
             initial={MOTION_CONFIG.initial}
             animate={MOTION_CONFIG.animate}
             transition={{ ...MOTION_CONFIG.transition, delay: 0.1 }}
+            className="mt-12"
           >
-            <Card className="mt-12">
-              <CardContent className="py-12 text-center text-[hsl(0,0%,42%)]">
-                No projects yet. Create one to get started.
-              </CardContent>
-            </Card>
+            <NoProjectsEmpty />
           </motion.div>
         ) : (
           <ul className="mt-12 grid gap-6 sm:grid-cols-2">

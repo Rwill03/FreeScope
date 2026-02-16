@@ -8,6 +8,7 @@ import { Nav } from "@/components/nav";
 import { Button } from "@/components/ui/button"; 
 import { Badge } from "@/components/ui/badge";
 import { CardSkeleton } from "@/components/ui/skeleton";
+import { NoFeatureRequestsEmpty, NoContractEmpty } from "@/components/empty-state";
 import { formatDate } from "@/lib/formatting";
 import { MOTION_CONFIG } from "@/lib/motion";
 import type { ProjectDetail, FeatureRequestListItem } from "@/types";
@@ -156,7 +157,7 @@ export default function ProjectDetailPage() {
                     <ReplaceScope projectId={id} onUpload={() => router.refresh()} />
                   </>
                 ) : (
-                  <UploadContract projectId={id} onUpload={() => router.refresh()} />
+                  <NoContractEmpty />
                 )}
               </div>
             </div>
@@ -175,9 +176,7 @@ export default function ProjectDetailPage() {
               </div>
               <div className="px-0 py-0">
                 {featureRequests.length === 0 ? (
-                  <p className="text-sm text-[hsl(0,0%,42%)]">
-                    No feature requests yet. Add one after uploading scope.
-                  </p>
+                  <NoFeatureRequestsEmpty />
                 ) : (
                   <ul className="space-y-3">
                     {featureRequests.map((fr) => (
