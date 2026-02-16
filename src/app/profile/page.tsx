@@ -8,6 +8,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { TagInput } from "@/components/tag-input";
+import { validateRole, validateHourlyRate, validateYearsExperience } from "@/lib/validation";
+import { MOTION_CONFIG } from "@/lib/motion";
 import type { FreelancerProfile as ProfileType } from "@/types";
 
 const motionOpt = { opacity: 0, y: 20 };
@@ -41,6 +43,26 @@ export default function ProfilePage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setMessage(null);
+
+    // Validate inputs
+    const roleValidation = validateRole(role);
+    if (!roleValidation.valid) {
+      setMessage("error");
+      return;
+    }
+
+    const yearsValidation = validateYearsExperience(yearsExperience);
+    if (!yearsValidation.valid) {
+      setMessage("error");
+      return;
+    }
+
+    const rateValidation = validateHourlyRate(hourlyRate);
+    if (!rateValidation.valid) {
+      setMessage("error");
+      return;
+    }
+
     setSaving(true);
     try {
       const res = await fetch("/api/profile", {
@@ -79,9 +101,9 @@ export default function ProfilePage() {
       <Nav />
       <div className="container-narrow px-4 py-20 md:py-28 lg:py-36">
         <motion.div
-          initial={motionOpt}
-          animate={motionAnimate}
-          transition={motionTransition}
+          initial={MOTION_CONFIG.initial}
+          animate={MOTION_CONFIG.animate}
+          transition={MOTION_CONFIG.transition}
         >
           <h1 className="text-4xl font-semibold tracking-tight md:text-5xl lg:text-6xl">
             Freelancer profile

@@ -6,19 +6,9 @@ import { motion } from "framer-motion";
 import { Nav } from "@/components/nav";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { formatDate } from "@/lib/formatting";
+import { MOTION_CONFIG, MOTION_LIST_ITEM } from "@/lib/motion";
 import type { Project } from "@/types";
-
-const motionOpt = { opacity: 0, y: 20 };
-const motionAnimate = { opacity: 1, y: 0 };
-const motionTransition = { duration: 0.6 };
-
-function formatDate(iso: string) {
-  return new Date(iso).toLocaleDateString("en-GB", {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-  });
-}
 
 export default function HomePage() {
   const [projects, setProjects] = useState<Project[]>([]);
@@ -38,9 +28,9 @@ export default function HomePage() {
       <Nav />
       <div className="container-narrow px-4 py-20 md:py-28 lg:py-36">
         <motion.div
-          initial={motionOpt}
-          animate={motionAnimate}
-          transition={motionTransition}
+          initial={MOTION_CONFIG.initial}
+          animate={MOTION_CONFIG.animate}
+          transition={MOTION_CONFIG.transition}
         >
           <h1 className="text-4xl font-semibold tracking-tight md:text-5xl lg:text-6xl">
             Projects
@@ -60,9 +50,9 @@ export default function HomePage() {
           <p className="mt-12 text-[hsl(0,0%,42%)]">Loading…</p>
         ) : projects.length === 0 ? (
           <motion.div
-            initial={motionOpt}
-            animate={motionAnimate}
-            transition={{ ...motionTransition, delay: 0.1 }}
+            initial={MOTION_CONFIG.initial}
+            animate={MOTION_CONFIG.animate}
+            transition={{ ...MOTION_CONFIG.transition, delay: 0.1 }}
           >
             <Card className="mt-12">
               <CardContent className="py-12 text-center text-[hsl(0,0%,42%)]">
@@ -75,9 +65,9 @@ export default function HomePage() {
             {projects.map((project, i) => (
               <motion.li
                 key={project.id}
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: 0.05 * i }}
+                initial={MOTION_LIST_ITEM.initial}
+                animate={MOTION_LIST_ITEM.animate}
+                transition={MOTION_LIST_ITEM.transition(i)}
               >
                 <Link href={`/project/${project.id}`} className="group">
                   <Card className="h-full transform-gpu transition-all duration-400 ease-in-out group-hover:shadow-lg group-hover:-translate-y-1 group-active:scale-95">

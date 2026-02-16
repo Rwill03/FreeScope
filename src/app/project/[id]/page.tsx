@@ -7,19 +7,9 @@ import { motion } from "framer-motion";
 import { Nav } from "@/components/nav";
 import { Button } from "@/components/ui/button"; 
 import { Badge } from "@/components/ui/badge";
+import { formatDate } from "@/lib/formatting";
+import { MOTION_CONFIG } from "@/lib/motion";
 import type { ProjectDetail, FeatureRequestListItem } from "@/types";
-
-const motionOpt = { opacity: 0, y: 20 };
-const motionAnimate = { opacity: 1, y: 0 };
-const motionTransition = { duration: 0.6 };
-
-function formatDate(iso: string) {
-  return new Date(iso).toLocaleDateString("en-GB", {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-  });
-}
 
 function ScopeBadge({ status }: { status: string }) {
   const label =
@@ -109,9 +99,9 @@ export default function ProjectDetailPage() {
       <Nav />
       <div className="container-wide px-4 py-20 md:py-28">
         <motion.div
-          initial={motionOpt}
-          animate={motionAnimate}
-          transition={motionTransition}
+          initial={MOTION_CONFIG.initial}
+          animate={MOTION_CONFIG.animate}
+          transition={MOTION_CONFIG.transition}
           className="mb-8"
         >
           <h1 className="text-3xl font-semibold tracking-tight md:text-4xl">
@@ -138,9 +128,9 @@ export default function ProjectDetailPage() {
 
         <div className="grid gap-8 lg:grid-cols-2">
           <motion.div
-            initial={motionOpt}
-            animate={motionAnimate}
-            transition={{ ...motionTransition, delay: 0.1 }}
+            initial={MOTION_CONFIG.initial}
+            animate={MOTION_CONFIG.animate}
+            transition={{ ...MOTION_CONFIG.transition, delay: 0.1 }}
           >
             <div className="rounded-2xl border border-[hsl(40,15%,90%)] bg-[hsl(40,20%,98%)] p-6 shadow-sm md:p-8">
               <div className="flex flex-col space-y-1.5 pb-4">
@@ -169,9 +159,9 @@ export default function ProjectDetailPage() {
           </motion.div>
 
           <motion.div
-            initial={motionOpt}
-            animate={motionAnimate}
-            transition={{ ...motionTransition, delay: 0.15 }}
+            initial={MOTION_CONFIG.initial}
+            animate={MOTION_CONFIG.animate}
+            transition={{ ...MOTION_CONFIG.transition, delay: 0.15 }}
           >
             <div className="rounded-2xl border border-[hsl(40,15%,90%)] bg-[hsl(40,20%,98%)] p-6 shadow-sm md:p-8">
               <div className="flex flex-col space-y-1.5 pb-4">
