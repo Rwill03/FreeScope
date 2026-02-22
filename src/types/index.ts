@@ -53,3 +53,45 @@ export type ScopeAIResult = {
   confidence: "low" | "medium" | "high";
   assumptions: string[];
 };
+
+export type DashboardSummary = {
+  totalProjects: number;
+  totalFeatures: number;
+  revenueProtected: number;
+  timeSavedHours: number;
+  hoursIdentified: number;
+  hourlyRate: number;
+};
+
+export type ScopeBreakdown = {
+  in_scope: number;
+  out_of_scope: number;
+  partial: number;
+};
+
+export type RecentActivity = {
+  id: string;
+  projectId: string;
+  projectName: string;
+  description: string;
+  scopeStatus: string;
+  totalPrice: number;
+  totalHours: number;
+  createdAt: string;
+};
+
+export type ProjectInsight = {
+  id: string;
+  name: string;
+  featureCount: number;
+  revenueProtected: number;
+  hasContract: boolean;
+  scopeBreakdown: ScopeBreakdown;
+};
+
+export type DashboardData = {
+  summary: DashboardSummary;
+  scopeBreakdown: ScopeBreakdown;
+  recentActivity: RecentActivity[];
+  projectInsights: ProjectInsight[];
+};

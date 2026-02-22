@@ -3,7 +3,7 @@
  */
 
 import Link from "next/link";
-import { Button } from "./button";
+import { Button } from "./ui/button";
 
 interface EmptyStateProps {
   title: string;
