@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils";
 
 const links = [
   { href: "/", label: "Projects" },
+  { href: "/dashboard", label: "Dashboard" },
   { href: "/profile", label: "Profile" },
 ];
 
@@ -27,7 +28,9 @@ export function Nav() {
               const isActive =
                 href === "/"
                   ? pathname === "/" || pathname.startsWith("/project")
-                  : pathname === href;
+                  : href === "/dashboard"
+                    ? pathname === "/dashboard"
+                    : pathname === href;
               return (
                 <Link
                   key={href}
