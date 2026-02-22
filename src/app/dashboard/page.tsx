@@ -82,7 +82,7 @@ export default function DashboardPage() {
   return (
     <>
       <Nav />
-      <div className="container-wide px-4 py-16 sm:py-20 md:py-28">
+      <div className="container-narrow px-6 py-16 sm:px-8 sm:py-20 md:py-28 lg:px-12">
         <motion.div
           initial={MOTION_CONFIG.initial}
           animate={MOTION_CONFIG.animate}
