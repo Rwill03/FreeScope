@@ -25,7 +25,10 @@ export default function ProfilePage() {
 
   useEffect(() => {
     fetch("/api/profile")
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) throw new Error("Failed to load profile");
+        return res.json();
+      })
       .then((data: { profile: ProfileType | null }) => {
         if (data.profile) {
           setRole(data.profile.role);
@@ -33,9 +36,11 @@ export default function ProfilePage() {
           setHourlyRate(String(data.profile.hourlyRate));
           setSkills(data.profile.skills || []);
         }
-        setLoading(false);
       })
-      .catch(() => setLoading(false));
+      .catch(() => {
+        console.error("Profile fetch error");
+      })
+      .finally(() => setLoading(false));
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {

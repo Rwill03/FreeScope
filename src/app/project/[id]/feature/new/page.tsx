@@ -26,11 +26,14 @@ export default function NewFeaturePage() {
   useEffect(() => {
     if (!id) return;
     fetch(`/api/projects/${id}`)
-      .then((res) => res.json())
+      .then((res) => {
+        if (!res.ok) throw new Error("Project not found");
+        return res.json();
+      })
       .then((data: { project?: { name: string } }) =>
         setProjectName(data.project?.name ?? null)
       )
-      .catch(() => {});
+      .catch(() => setProjectName(null));
   }, [id]);
 
   const handleSubmit = async (e: React.FormEvent) => {
