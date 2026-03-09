@@ -34,7 +34,12 @@ export async function GET() {
 
     projects.forEach((project) => {
       project.featureRequests.forEach((fr) => {
-        scopeBreakdown[fr.scopeStatus as keyof typeof scopeBreakdown]++;
+        const status = fr.scopeStatus as keyof typeof scopeBreakdown;
+        if (status in scopeBreakdown) {
+          scopeBreakdown[status]++;
+        } else {
+          console.warn(`Unknown scope status: ${fr.scopeStatus}`);
+        }
         
         // Revenue protected = out-of-scope and partial work that was identified
         if (fr.scopeStatus === "out_of_scope" || fr.scopeStatus === "partial") {
