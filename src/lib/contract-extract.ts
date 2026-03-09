@@ -1,27 +1,13 @@
 async function extractTextFromPdf(buffer: Buffer): Promise<string> {
-  const { createRequire } = await import("module");
-  const path = await import("path");
-  const { pathToFileURL } = await import("url");
-  const projectRequire = createRequire(
-    path.default.join(process.cwd(), "package.json")
-  );
-  const workerPath = projectRequire.resolve(
-    "pdfjs-dist/legacy/build/pdf.worker.mjs"
-  );
-  const workerUrl = pathToFileURL(workerPath).href;
-
-  const pdfjs = await import("pdfjs-dist/legacy/build/pdf.mjs");
-  if (pdfjs.GlobalWorkerOptions) {
-    pdfjs.GlobalWorkerOptions.workerSrc = workerUrl;
-  }
-
-  const { PDFParse } = await import("pdf-parse");
-  const parser = new PDFParse({ data: new Uint8Array(buffer) });
   try {
-    const result = await parser.getText();
+    const pdfParse = await import("pdf-parse");
+    const parseText = pdfParse.default;
+    const result = await parseText(buffer);
     return result.text?.trim() ?? "";
-  } finally {
-    await parser.destroy().catch(() => {});
+  } catch (err) {
+    throw new Error(
+      `Failed to extract text from PDF: ${err instanceof Error ? err.message : String(err)}`
+    );
   }
 }
 
