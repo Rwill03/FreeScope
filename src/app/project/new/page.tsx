@@ -12,10 +12,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { validateProjectName, validateProjectDescription } from "@/lib/validation";
 import { MOTION_CONFIG } from "@/lib/motion";
 
-const motionOpt = { opacity: 0, y: 20 };
-const motionAnimate = { opacity: 1, y: 0 };
-const motionTransition = { duration: 0.6 };
-
 export default function NewProjectPage() {
   const router = useRouter();
   const [name, setName] = useState("");
