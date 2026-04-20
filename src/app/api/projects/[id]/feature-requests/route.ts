@@ -4,7 +4,7 @@ import { evaluateScopeAndEstimate } from "@/lib/scope-ai";
 
 export async function GET(
   _request: Request,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     const { id: projectId } = await params;
@@ -26,14 +26,14 @@ export async function GET(
     console.error(e);
     return NextResponse.json(
       { error: "Failed to fetch feature requests" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
 
 export async function POST(
   request: Request,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: Promise<{ id: string }> },
 ) {
   try {
     const { id: projectId } = await params;
@@ -54,7 +54,7 @@ export async function POST(
           error:
             "No contract/scope document for this project. Upload one first.",
         },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -64,7 +64,7 @@ export async function POST(
     if (!profile) {
       return NextResponse.json(
         { error: "No freelancer profile. Create a profile first." },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -74,7 +74,7 @@ export async function POST(
     if (!description) {
       return NextResponse.json(
         { error: "description is required" },
-        { status: 400 }
+        { status: 400 },
       );
     }
 
@@ -115,7 +115,7 @@ export async function POST(
       },
     });
   } catch (e) {
-    console.error(e);
+    console.error("Feature request evaluation error:", e);
     const message = e instanceof Error ? e.message : "Evaluation failed";
     return NextResponse.json({ error: message }, { status: 500 });
   }
