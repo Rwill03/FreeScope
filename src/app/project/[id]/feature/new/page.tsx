@@ -28,7 +28,7 @@ export default function NewFeaturePage() {
     fetch(`/api/projects/${id}`)
       .then((res) => res.json())
       .then((data: { project?: { name: string } }) =>
-        setProjectName(data.project?.name ?? null)
+        setProjectName(data.project?.name ?? null),
       )
       .catch(() => {});
   }, [id]);
@@ -63,7 +63,10 @@ export default function NewFeaturePage() {
           transition={motionTransition}
         >
           <p className="text-sm text-[hsl(0,0%,42%)]">
-            <Link href={`/project/${id}`} className="hover:text-[hsl(20,70%,55%)]">
+            <Link
+              href={`/project/${id}`}
+              className="hover:text-[hsl(20,70%,55%)]"
+            >
               {projectName || "Project"}
             </Link>
           </p>
@@ -71,8 +74,8 @@ export default function NewFeaturePage() {
             New feature request
           </h1>
           <p className="mt-2 text-base text-[hsl(0,0%,42%)]">
-            The feature will be evaluated against the project scope. Scope status
-            and price (if out of scope or partial) will be shown.
+            The feature will be evaluated against the project scope. Scope
+            status and price (if out of scope or partial) will be shown.
           </p>
 
           <Card className="mt-8">
@@ -93,11 +96,9 @@ export default function NewFeaturePage() {
                     className="min-h-[160px]"
                   />
                 </div>
-                {error && (
-                  <p className="text-sm text-red-600">{error}</p>
-                )}
+                {error && <p className="text-sm text-red-600">{error}</p>}
               </CardContent>
-              <div className="px-6 pb-6 md:px-8 md:pb-8">
+              <div className="mt-4 px-6 pb-6 md:px-8 md:pb-8">
                 <Button type="submit" disabled={loading}>
                   {loading ? "Evaluating…" : "Evaluate against scope"}
                 </Button>

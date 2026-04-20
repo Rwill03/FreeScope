@@ -9,7 +9,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { TagInput } from "@/components/tag-input";
 import { FormSkeleton } from "@/components/ui/skeleton";
-import { validateRole, validateHourlyRate, validateYearsExperience } from "@/lib/validation";
+import {
+  validateRole,
+  validateHourlyRate,
+  validateYearsExperience,
+} from "@/lib/validation";
 import { MOTION_CONFIG } from "@/lib/motion";
 import type { FreelancerProfile as ProfileType } from "@/types";
 
@@ -21,7 +25,9 @@ export default function ProfilePage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<"saved" | "error" | null>(null);
-  const [validationErrors, setValidationErrors] = useState<{ [key: string]: string }>({});
+  const [validationErrors, setValidationErrors] = useState<{
+    [key: string]: string;
+  }>({});
 
   useEffect(() => {
     fetch("/api/profile")
@@ -51,15 +57,25 @@ export default function ProfilePage() {
 
     const yearsValidation = validateYearsExperience(yearsExperience);
     if (!yearsValidation.valid) {
-      setValidationErrors((prev) => ({ ...prev, yearsExperience: yearsValidation.error }));
+      setValidationErrors((prev) => ({
+        ...prev,
+        yearsExperience: yearsValidation.error,
+      }));
     }
 
     const rateValidation = validateHourlyRate(hourlyRate);
     if (!rateValidation.valid) {
-      setValidationErrors((prev) => ({ ...prev, hourlyRate: rateValidation.error }));
+      setValidationErrors((prev) => ({
+        ...prev,
+        hourlyRate: rateValidation.error,
+      }));
     }
 
-    if (!roleValidation.valid || !yearsValidation.valid || !rateValidation.valid) {
+    if (
+      !roleValidation.valid ||
+      !yearsValidation.valid ||
+      !rateValidation.valid
+    ) {
       setMessage("error");
       return;
     }
@@ -139,10 +155,14 @@ export default function ProfilePage() {
                     placeholder="e.g. Full-stack developer"
                     required
                     aria-invalid={!!validationErrors.role}
-                    aria-describedby={validationErrors.role ? "role-error" : undefined}
+                    aria-describedby={
+                      validationErrors.role ? "role-error" : undefined
+                    }
                   />
                   {validationErrors.role && (
-                    <p id="role-error" className="text-sm text-red-600">{validationErrors.role}</p>
+                    <p id="role-error" className="text-sm text-red-600">
+                      {validationErrors.role}
+                    </p>
                   )}
                 </div>
                 <div className="grid gap-4 sm:grid-cols-2">
@@ -157,10 +177,16 @@ export default function ProfilePage() {
                       placeholder="5"
                       required
                       aria-invalid={!!validationErrors.yearsExperience}
-                      aria-describedby={validationErrors.yearsExperience ? "years-error" : undefined}
+                      aria-describedby={
+                        validationErrors.yearsExperience
+                          ? "years-error"
+                          : undefined
+                      }
                     />
                     {validationErrors.yearsExperience && (
-                      <p id="years-error" className="text-sm text-red-600">{validationErrors.yearsExperience}</p>
+                      <p id="years-error" className="text-sm text-red-600">
+                        {validationErrors.yearsExperience}
+                      </p>
                     )}
                   </div>
                   <div className="space-y-2">
@@ -175,10 +201,14 @@ export default function ProfilePage() {
                       placeholder="85"
                       required
                       aria-invalid={!!validationErrors.hourlyRate}
-                      aria-describedby={validationErrors.hourlyRate ? "rate-error" : undefined}
+                      aria-describedby={
+                        validationErrors.hourlyRate ? "rate-error" : undefined
+                      }
                     />
                     {validationErrors.hourlyRate && (
-                      <p id="rate-error" className="text-sm text-red-600">{validationErrors.hourlyRate}</p>
+                      <p id="rate-error" className="text-sm text-red-600">
+                        {validationErrors.hourlyRate}
+                      </p>
                     )}
                   </div>
                 </div>
@@ -187,13 +217,17 @@ export default function ProfilePage() {
                   <TagInput value={skills} onChange={setSkills} />
                 </div>
                 {message === "saved" && (
-                  <p className="text-sm text-[hsl(20,70%,45%)]">Profile saved.</p>
+                  <p className="text-sm text-[hsl(20,70%,45%)]">
+                    Profile saved.
+                  </p>
                 )}
                 {message === "error" && (
-                  <p className="text-sm text-red-600">Failed to save. Try again.</p>
+                  <p className="text-sm text-red-600">
+                    Failed to save. Try again.
+                  </p>
                 )}
               </CardContent>
-              <div className="px-6 pb-6 md:px-8 md:pb-8">
+              <div className="mt-4 px-6 pb-6 md:px-8 md:pb-8">
                 <Button type="submit" disabled={saving}>
                   {saving ? "Saving…" : "Save profile"}
                 </Button>

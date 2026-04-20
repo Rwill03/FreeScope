@@ -5,10 +5,13 @@ import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Nav } from "@/components/nav";
-import { Button } from "@/components/ui/button"; 
+import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { CardSkeleton } from "@/components/ui/skeleton";
-import { NoFeatureRequestsEmpty, NoContractEmpty } from "@/components/empty-state";
+import {
+  NoFeatureRequestsEmpty,
+  NoContractEmpty,
+} from "@/components/empty-state";
 import { formatDate } from "@/lib/formatting";
 import { MOTION_CONFIG } from "@/lib/motion";
 import type { ProjectDetail, FeatureRequestListItem } from "@/types";
@@ -57,7 +60,11 @@ export default function ProjectDetailPage() {
         const data: { project: ProjectDetail } = await res.json();
         setProject(data.project);
       } catch (e: unknown) {
-        const isAbort = typeof e === "object" && e !== null && ("name" in e) && (e as { name?: unknown }).name === "AbortError";
+        const isAbort =
+          typeof e === "object" &&
+          e !== null &&
+          "name" in e &&
+          (e as { name?: unknown }).name === "AbortError";
         if (isAbort) return;
         setError(e instanceof Error ? e.message : "Project not found");
       } finally {
@@ -88,7 +95,11 @@ export default function ProjectDetailPage() {
         <Nav />
         <div className="container-wide px-4 py-16 sm:py-20">
           <p className="text-red-600">{error || "Not found"}</p>
-          <Button variant="secondary" className="mt-4" onClick={() => router.push("/")}>
+          <Button
+            variant="secondary"
+            className="mt-4"
+            onClick={() => router.push("/")}
+          >
             Back to projects
           </Button>
         </div>
@@ -97,7 +108,8 @@ export default function ProjectDetailPage() {
   }
 
   const hasContract = !!project.contractText?.trim();
-  const featureRequests = (project.featureRequests || []) as FeatureRequestListItem[];
+  const featureRequests = (project.featureRequests ||
+    []) as FeatureRequestListItem[];
 
   return (
     <>
@@ -119,9 +131,7 @@ export default function ProjectDetailPage() {
           ) : null}
           <div className="mt-4 flex flex-wrap gap-4">
             <Link href={`/project/${id}/feature/new`}>
-              <Button disabled={!hasContract}>
-                New feature request
-              </Button>
+              <Button disabled={!hasContract}>New feature request</Button>
             </Link>
             {!hasContract && (
               <span className="text-sm text-[hsl(0,0%,42%)]">
@@ -154,10 +164,18 @@ export default function ProjectDetailPage() {
                     <div className="max-h-[400px] overflow-y-auto rounded-lg border border-[hsl(40,15%,90%)] bg-[hsl(40,15%,95%)] p-4 text-sm leading-relaxed whitespace-pre-wrap">
                       {project.contractText}
                     </div>
-                    <ReplaceScope projectId={id} onUpload={() => router.refresh()} />
+                    <ReplaceScope
+                      projectId={id}
+                      onUpload={() => router.refresh()}
+                    />
                   </>
                 ) : (
-                  <NoContractEmpty />
+                  <div className="rounded-lg border border-[hsl(40,15%,90%)] bg-[hsl(40,15%,95%)] p-4">
+                    <UploadContract
+                      projectId={id}
+                      onUpload={() => router.refresh()}
+                    />
+                  </div>
                 )}
               </div>
             </div>
@@ -269,17 +287,22 @@ function UploadContract({
         />
       </div>
       <div>
+        <label className="text-sm font-medium text-[hsl(0,0%,16%)]">
+          Or upload file
+        </label>
         <input
           type="file"
           accept=".pdf,.txt,.md"
           onChange={(e) => setFile(e.target.files?.[0] ?? null)}
-          className="text-sm"
+          className="mt-2 text-sm"
         />
       </div>
       {err && <p className="text-sm text-red-600">{err}</p>}
-      <Button type="submit" disabled={loading || (!paste.trim() && !file)}>
-        {loading ? "Uploading…" : "Save scope"}
-      </Button>
+      <div className="pt-2">
+        <Button type="submit" disabled={loading || (!paste.trim() && !file)}>
+          {loading ? "Uploading…" : "Save scope"}
+        </Button>
+      </div>
     </form>
   );
 }

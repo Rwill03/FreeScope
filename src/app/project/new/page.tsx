@@ -9,7 +9,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { validateProjectName, validateProjectDescription } from "@/lib/validation";
+import {
+  validateProjectName,
+  validateProjectDescription,
+} from "@/lib/validation";
 import { MOTION_CONFIG } from "@/lib/motion";
 
 const motionOpt = { opacity: 0, y: 20 };
@@ -45,7 +48,10 @@ export default function NewProjectPage() {
       const res = await fetch("/api/projects", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: name.trim(), description: description.trim() }),
+        body: JSON.stringify({
+          name: name.trim(),
+          description: description.trim(),
+        }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Failed to create project");
@@ -78,7 +84,7 @@ export default function NewProjectPage() {
               <CardHeader>
                 <CardTitle>Project</CardTitle>
               </CardHeader>
-              <CardContent className="space-y-6">
+              <CardContent className="space-y-6 pb-4">
                 <div className="space-y-2">
                   <Label htmlFor="name">Name</Label>
                   <Input
@@ -99,11 +105,9 @@ export default function NewProjectPage() {
                     rows={3}
                   />
                 </div>
-                {error && (
-                  <p className="text-sm text-red-600">{error}</p>
-                )}
+                {error && <p className="text-sm text-red-600">{error}</p>}
               </CardContent>
-              <div className="px-6 pb-6 md:px-8 md:pb-8">
+              <div className="mt-4 px-6 pb-6 md:px-8 md:pb-8">
                 <Button type="submit" disabled={loading}>
                   {loading ? "Creating…" : "Create project"}
                 </Button>
