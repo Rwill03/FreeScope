@@ -45,6 +45,8 @@ export type FeatureRequestDetail = {
 export type ScopeAIResult = {
   scope_status: "in_scope" | "out_of_scope" | "partial";
   scope_reasoning: string;
+  contract_citations: string[];
+  decision_explanation: string;
   missing_scope_items: string[];
   tasks: Array<{ name: string; hours: number; skills: string[] }>;
   total_hours: number;

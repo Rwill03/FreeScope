@@ -5,16 +5,19 @@
 
 import OpenAI from "openai";
 
-const SYSTEM_PROMPT = `You are an expert technical project manager interpreting software contracts and scope documents.
+const SYSTEM_PROMPT = `You are an expert technical project manager interpreting software contracts and scope documents for AI business projects.
 
 Your task is to:
 1. Compare a FEATURE REQUEST against a PROJECT SCOPE (contract/requirements).
 2. Determine scope alignment: in_scope, out_of_scope, or partial.
-3. If in_scope: state clearly that the feature is covered; tasks and price are optional (price 0 or included).
-4. If out_of_scope or partial: explain why, list missing scope items, and provide a full estimation (task breakdown, hours, total price using the given hourly rate).
+3. ALWAYS cite specific contract sections that support your decision.
+4. Provide detailed reasoning explaining WHY the feature is in/out of scope based on contract language.
+5. If in_scope: state clearly that the feature is covered with contract citations; tasks and price are optional (price 0 or included).
+6. If out_of_scope or partial: cite what's missing from the contract, list missing scope items, and provide full estimation.
 
 RULES:
 - Base your decision ONLY on the contract/scope text and the feature description.
+- ALWAYS include contract citations (quote relevant sections or reference specific clauses).
 - Be conservative: when in doubt between in_scope and partial, choose partial.
 - Round hours to 0.5.
 - Currency: EUR. Use the freelancer's hourly rate for price.
@@ -23,7 +26,9 @@ RULES:
 You MUST respond with exactly this JSON structure (no other keys, no comments):
 {
   "scope_status": "in_scope" | "out_of_scope" | "partial",
-  "scope_reasoning": "string explaining your decision",
+  "scope_reasoning": "detailed explanation of why this is in/out/partial scope",
+  "contract_citations": ["relevant quote from contract 1", "relevant quote from contract 2"],
+  "decision_explanation": "detailed argument explaining the decision based on contract language",
   "missing_scope_items": ["item1", "item2"],
   "tasks": [
     { "name": "string", "hours": number, "skills": ["string"] }
@@ -48,8 +53,10 @@ export type ScopeAIInput = {
 export type ScopeAIResult = {
   scope_status: "in_scope" | "out_of_scope" | "partial";
   scope_reasoning: string;
+  contract_citations: string[];
+  decision_explanation: string;
   missing_scope_items: string[];
-  tasks: Array< { name: string; hours: number; skills: string[] } >;
+  tasks: Array<{ name: string; hours: number; skills: string[] }>;
   total_hours: number;
   hourly_rate: number;
   total_price: number;
@@ -72,11 +79,11 @@ FREELANCER:
 - Hourly rate (EUR): ${input.freelancerHourlyRate}
 - Skills: ${(input.freelancerSkills || []).join(", ") || "Not specified"}
 
-Respond with ONLY the JSON object, no other text.`;
+Respond with ONLY the JSON object, no other text. Make sure to include contract_citations with exact quotes from the contract that support your decision.`;
 }
 
 export async function evaluateScopeAndEstimate(
-  input: ScopeAIInput
+  input: ScopeAIInput,
 ): Promise<ScopeAIResult> {
   const baseURL = process.env.OLLAMA_BASE_URL ?? "http://localhost:11434/v1";
   const model = process.env.OLLAMA_MODEL ?? "llama3.2";
@@ -98,7 +105,10 @@ export async function evaluateScopeAndEstimate(
   const raw = response.choices[0]?.message?.content?.trim();
   if (!raw) throw new Error("Empty response from LLM");
 
-  const jsonStr = raw.replace(/^```json?\s*/i, "").replace(/\s*```$/i, "").trim();
+  const jsonStr = raw
+    .replace(/^```json?\s*/i, "")
+    .replace(/\s*```$/i, "")
+    .trim();
   let parsed: unknown;
   try {
     parsed = JSON.parse(jsonStr);
@@ -115,6 +125,10 @@ export async function evaluateScopeAndEstimate(
   return {
     scope_status: scopeStatus as ScopeAIResult["scope_status"],
     scope_reasoning: String(o.scope_reasoning ?? ""),
+    contract_citations: Array.isArray(o.contract_citations)
+      ? o.contract_citations.map(String)
+      : [],
+    decision_explanation: String(o.decision_explanation ?? ""),
     missing_scope_items: Array.isArray(o.missing_scope_items)
       ? o.missing_scope_items.map(String)
       : [],
@@ -134,8 +148,6 @@ export async function evaluateScopeAndEstimate(
     confidence: ["low", "medium", "high"].includes(String(o.confidence))
       ? (o.confidence as ScopeAIResult["confidence"])
       : "medium",
-    assumptions: Array.isArray(o.assumptions)
-      ? o.assumptions.map(String)
-      : [],
+    assumptions: Array.isArray(o.assumptions) ? o.assumptions.map(String) : [],
   };
 }

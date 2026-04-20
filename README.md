@@ -14,6 +14,7 @@ FreeScope is an intelligent scope management and feature estimation tool designe
 ### The Problem It Solves
 
 Scope creep is a silent profit killer for freelancers. When clients request features that weren't in the original contract, you face a choice:
+
 - **Do it for free** — Lose margin and time
 - **Charge extra** — Risk client conflict and disputes over what was "included"
 - **Argue with clients** — Waste time on non-technical discussions
@@ -23,6 +24,7 @@ Scope creep is a silent profit killer for freelancers. When clients request feat
 ### The Solution
 
 FreeScope uses a local language model (Ollama) running on your machine to:
+
 1. Analyze your project's original scope/contract
 2. Evaluate each new feature request objectively
 3. Classify work as **in scope** (included), **out of scope** (extra cost), or **partially in scope**
@@ -44,7 +46,6 @@ FreeScope uses a local language model (Ollama) running on your machine to:
 ## Technical Architecture
 
 ### Technology Stack
-
 
 - **Frontend:** React + TypeScript — Modern, type-safe UI with real-time updates
 - **Backend:** Next.js App Router — Full-stack framework with API routes and server components
@@ -97,7 +98,6 @@ All components use Tailwind CSS for consistent styling and Framer Motion for smo
 2. **Environment**
 
    Copy `.env.example` to `.env` and set:
-
    - `DATABASE_URL` — SQLite path (default `file:./dev.db`)
    - `OLLAMA_BASE_URL` — Ollama API (default `http://localhost:11434/v1`)
    - `OLLAMA_MODEL` — Model name (default `llama3.2`)
@@ -118,7 +118,22 @@ All components use Tailwind CSS for consistent styling and Framer Motion for smo
    npx prisma migrate dev
    ```
 
-5. **Run**
+5. **Seed Sample Data (Optional)**
+
+   To populate the database with sample AI business projects and contracts:
+
+   ```bash
+   npm run seed
+   ```
+
+   This creates:
+   - 3 AI-focused business projects (Customer Service Platform, Document Processing, Recommendation Engine)
+   - Detailed contract/scope documents for each project
+   - 1 freelancer profile with AI/ML skills
+
+   Great for testing and understanding how FreeScope works!
+
+6. **Run**
 
    ```bash
    npm run dev
@@ -133,7 +148,6 @@ All components use Tailwind CSS for consistent styling and Framer Motion for smo
 Think of FreeScope as your "Scope Coach":
 
 1. **Set Your Profile** — Tell us about yourself: your role, experience level, and hourly rate. This helps calculate fair pricing for out-of-scope work.
-   
 2. **Create a Project** — Name and describe the project (e.g., "E-commerce Platform Redesign").
 
 3. **Upload the Scope** — Paste or upload your project contract/requirements. This becomes your "golden truth" for what's included.
@@ -184,7 +198,6 @@ User Input (Feature Request)
 ---
 
 1. **Profile Setup** — Set role, years of experience, hourly rate (EUR), and skills. Used for price calculation when features are out of scope or partial.
-   
 2. **Create Projects** — Create a project with name and optional description.
 
 3. **Define Scope** — Upload PDF contract or paste text describing the project scope. This is the canonical reference for "what's included."
@@ -270,17 +283,20 @@ prisma/
 ### Key Modules
 
 **`lib/scope-ai.ts`** — AI Engine
+
 - Prompt engineering for scope comparison
 - Ollama API integration
 - JSON response parsing and validation
 - Task breakdown generation
 
 **`lib/contract-extract.ts`** — Document Processing
+
 - PDF text extraction
 - Plain text normalization
 - Chunking for large documents
 
 **`lib/db.ts`** — Database Layer
+
 - Prisma ORM queries
 - Relationship management (Project → Features → Estimates)
 - Caching strategies

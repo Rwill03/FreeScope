@@ -27,11 +27,7 @@ function ScopeBadge({ status }: { status: string }) {
       : status === "out_of_scope"
         ? "bg-amber-100 text-amber-800"
         : "bg-[hsl(20,80%,92%)] text-[hsl(20,70%,45%)]";
-  return (
-    <Badge className={className}>
-      {label}
-    </Badge>
-  );
+  return <Badge className={className}>{label}</Badge>;
 }
 
 export default function FeatureResultPage() {
@@ -51,7 +47,7 @@ export default function FeatureResultPage() {
         return res.json();
       })
       .then((data: { featureRequest: FeatureRequestDetail }) =>
-        setFeature(data.featureRequest)
+        setFeature(data.featureRequest),
       )
       .catch(() => setError("Not found"))
       .finally(() => setLoading(false));
@@ -74,7 +70,11 @@ export default function FeatureResultPage() {
         <Nav />
         <div className="container-wide px-4 py-20">
           <p className="text-red-600">{error || "Not found"}</p>
-          <Button variant="secondary" className="mt-4" onClick={() => router.push("/")}>
+          <Button
+            variant="secondary"
+            className="mt-4"
+            onClick={() => router.push("/")}
+          >
             Back to projects
           </Button>
         </div>
@@ -103,7 +103,10 @@ export default function FeatureResultPage() {
           className="mb-8"
         >
           <p className="text-sm text-[hsl(0,0%,42%)]">
-            <Link href={`/project/${id}`} className="hover:text-[hsl(20,70%,55%)]">
+            <Link
+              href={`/project/${id}`}
+              className="hover:text-[hsl(20,70%,55%)]"
+            >
               Project
             </Link>
           </p>
@@ -137,6 +140,34 @@ export default function FeatureResultPage() {
                         {parsed.scope_reasoning}
                       </p>
                     </div>
+                    {parsed.decision_explanation && (
+                      <div>
+                        <h3 className="text-sm font-medium text-[hsl(0,0%,42%)]">
+                          Decision explanation
+                        </h3>
+                        <p className="mt-1 text-sm leading-relaxed text-[hsl(20,70%,45%)]">
+                          {parsed.decision_explanation}
+                        </p>
+                      </div>
+                    )}
+                    {parsed.contract_citations &&
+                      parsed.contract_citations.length > 0 && (
+                        <div>
+                          <h3 className="text-sm font-medium text-[hsl(0,0%,42%)]">
+                            Contract sources
+                          </h3>
+                          <div className="mt-2 space-y-2">
+                            {parsed.contract_citations.map((citation, i) => (
+                              <div
+                                key={i}
+                                className="border-l-2 border-[hsl(20,70%,45%)] bg-[hsl(20,80%,96%)] p-3 text-xs italic text-[hsl(20,60%,35%)]"
+                              >
+                                "{citation}"
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
                     {parsed.missing_scope_items?.length > 0 && (
                       <div>
                         <h3 className="text-sm font-medium text-[hsl(0,0%,42%)]">
@@ -194,7 +225,12 @@ export default function FeatureResultPage() {
           <motion.div
             initial={{ scale: 0.98, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            transition={{ type: "spring", stiffness: 300, damping: 30, delay: 0.1 }}
+            transition={{
+              type: "spring",
+              stiffness: 300,
+              damping: 30,
+              delay: 0.1,
+            }}
           >
             <Card className="h-fit">
               <CardContent className="pt-6 md:pt-8">
@@ -236,7 +272,7 @@ export default function FeatureResultPage() {
                       </p>
                     </div>
                   )}
-                  {parsed && (
+                  {parsed && parsed.confidence && (
                     <div>
                       <p className="mb-2 text-sm font-medium text-[hsl(0,0%,42%)]">
                         Confidence
@@ -247,10 +283,11 @@ export default function FeatureResultPage() {
                             ? "bg-green-100 text-green-800"
                             : parsed.confidence === "low"
                               ? "bg-amber-100 text-amber-800"
-                              : ""
+                              : "bg-blue-100 text-blue-800"
                         }
                       >
-                        {parsed.confidence}
+                        {String(parsed.confidence)[0]?.toUpperCase() +
+                          String(parsed.confidence).slice(1)}
                       </Badge>
                     </div>
                   )}
